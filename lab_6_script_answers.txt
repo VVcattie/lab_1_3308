@@ -1,0 +1,141 @@
+name: Vanessa Zhang
+My labtop crashed once so I lost part imformation before 5, but I think there nothing important before 5.
+
+\dt
+List of relations
+ Schema |       Name       | Type  |  Owner   
+--------+------------------+-------+----------
+ public | compeuniv        | table | postgres
+ public | football_games   | table | postgres
+ public | football_players | table | postgres
+(3 rows)
+5.1
+in:SELECT name,major FROM football_players ORDER by major ;
+Out:
+       name        | major 
+-------------------+-------
+ Cedric Vega       | ARTS
+ Wade Farmer       | ARTS
+ Erick Graves      | ARTS
+ Jared Castillo    | ARTS
+ Doyle Huff        | CSCI
+ Myron Walters     | CSCI
+ Charles Porter    | CSCI
+ Melba Pope        | MATH
+ Rafael Boreous    | MATH
+ Javier Washington | MATH
+(10 rows)
+
+5.2
+in:SELECT name,rushing_yards FROM football_players WHERE rushing_yards>=70;
+Out:
+      name      | rushing_yards 
+----------------+---------------
+ Erick Graves   |            78
+ Charles Porter |           102
+ Rafael Boreous |           111
+ Jared Castillo |           113
+(4 rows)
+5.3
+in:SELECT * From football_games WHere visitor_name='Nebraska';
+out:
+ visitor_name | home_score | visitor_score | game_date  |   players   
+--------------+------------+---------------+------------+-------------
+ Nebraska     |         33 |            28 | 2018-09-08 | {2,3,4,5,6}
+(1 row)
+5.4
+in:SELECT * From football_games WHere visitor_score<home_score;
+out:
+  visitor_name  | home_score | visitor_score | game_date  |   players   
+----------------+------------+---------------+------------+-------------
+ Colorado State |         45 |            13 | 2018-08-31 | {1,2,3,4,5}
+ Nebraska       |         33 |            28 | 2018-09-08 | {2,3,4,5,6}
+ New Hampshire  |         45 |            14 | 2018-09-15 | {3,4,5,6,7}
+ UCLA           |         38 |            16 | 2018-09-28 | {4,5,6,7,8}
+ Arizona State  |         28 |            21 | 2018-10-06 | {5,6,7,8,9}
+(5 rows)
+5.5
+in:SELECT visitor_name,game_date From football_games Where game_date>'2018-09-01' and game_date<'2018-12-31';
+out:
+    visitor_name     | game_date  
+---------------------+------------
+ Nebraska            | 2018-09-08
+ New Hampshire       | 2018-09-15
+ UCLA                | 2018-09-28
+ Arizona State       | 2018-10-06
+ Southern California | 2018-10-13
+ Washington          | 2018-10-20
+ Oregon State        | 2018-10-27
+ Arizona             | 2018-11-02
+ Washington State    | 2018-11-10
+ Utah                | 2018-11-17
+ California          | 2018-11-24
+(11 rows)
+5.6
+in:Select AVG(home_score) From football_games;
+out:
+avg         
+---------------------
+ 27.0833333333333333
+(1 row)
+
+5.7
+in:SELECT major,COUNT( major) AS number_of_players From football_players GROUP BY major;
+out:
+ major | number_of_players 
+-------+-------------------
+ CSCI  |                 3
+ ARTS  |                 4
+ MATH  |                 3
+(3 rows)
+5.8
+in:SELECT COUNT(*) AS number_of_players From football_players Where major='CSCI';
+out:
+ number_of_players 
+-------------------
+                 3
+(1 row)
+6.1
+in:
+football_db=# CREATE VIEW winers AS
+  SELECT Count(*) From football_games Where home_score>visitor_score;
+football_db=# Select * From winers;
+out:
+ count 
+-------
+     5
+(1 row)
+
+6.2:
+in:
+football_db=# CREATE VIEW total AS
+  SELECT Count(*) From football_games;
+football_db=# Select * From total;
+out:
+ count 
+-------
+    12
+(1 row)
+6.3
+in:
+Select Cast(5 as float)/Cast(12 as float);
+out:
+     ?column?      
+-------------------
+ 0.416666666666667
+(1 row)
+7.1
+in:  SELECT COUNT(*) FROM football_players INNER JOIN football_games ON football_players.id=any(football_games.players) WHERE name='Cedric Vega';
+out:
+ count 
+-------
+     6
+(1 row)
+7.2
+in:SELECT Cast(rushing_yards AS FLOAT)/Cast(COUNT(*) AS FLOAT)as output FROM football_players INNER JOIN football_games ON football_players.id=any(football_games.players) WHERE name='Cedric Vega' GROUP BY rushing_yards;
+
+out:
+      output      
+------------------
+ 4.16666666666667
+(1 row)
